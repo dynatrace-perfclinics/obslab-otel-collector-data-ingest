@@ -38,6 +38,8 @@ Use `kubectl` to create a `Secret` to store your Dynatrace connection details.
 
 Substitute your values into the following command and execute it.
 
+Change `abc12345` to your environment ID and change `dt0c01.sample.secret` to the value of your API token (generated above).
+
 Note: Do not change the name. Leave as `dynatrace-otelcol-dt-api-credentials`
 
 ```

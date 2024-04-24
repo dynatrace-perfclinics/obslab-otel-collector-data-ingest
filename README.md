@@ -94,7 +94,7 @@ Note: This step is optional because there is a load generator already running. O
 Expose the user interface on port 8080 by port-forwarding:
 
 ```
-kubectl -n default port-forward sv/my-otel-demo-frontendproxy 8080:8080
+kubectl -n default port-forward svc/my-otel-demo-frontendproxy 8080:8080
 ```
 
 Open a browser and go to `http://localhost:8080`

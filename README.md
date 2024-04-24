@@ -42,7 +42,7 @@ Note: Do not change the name. Leave as `dynatrace-otelcol-dt-api-credentials`
 
 ```
 kubectl create secret generic dynatrace-otelcol-dt-api-credentials \
---from-literal=DT_ENDPOINT=https://abc12345.live.dynatrace.com \
+--from-literal=DT_ENDPOINT=https://abc12345.live.dynatrace.com/api/v2/otlp \
 --from-literal=DT_API_TOKEN=dt0c01.sample.secret
 ```
 
@@ -97,7 +97,11 @@ Expose the user interface on port 8080 by port-forwarding:
 kubectl -n default port-forward svc/my-otel-demo-frontendproxy 8080:8080
 ```
 
-Open a browser and go to `http://localhost:8080`
+Go to the `Ports` tab, right click the port `8080` and choose "Open in Browser".
+
+You should see the OpenTelemetry demo application.
+
+![opentelemetry demo application](.devcontainer/images/otel-demo-app.png)
 
 ## Query Observability Data
 

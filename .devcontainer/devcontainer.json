@@ -36,12 +36,12 @@
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
-		30100,
+		8080,
 	],
 
 	// add labels
 	"portsAttributes": {
-		"30100": { "label": "OTEL Demo" }
+		"8080": { "label": "OTEL Demo" }
 	},
 
 	"hostRequirements": {

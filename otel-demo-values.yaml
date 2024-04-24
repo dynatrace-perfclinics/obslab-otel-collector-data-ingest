@@ -1,0 +1,16 @@
+opentelemetry-collector:
+  enabled: false
+jaeger:
+  enabled: false
+grafana:
+  enabled: false
+
+default:
+  env:
+    - name: OTEL_SERVICE_NAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: "metadata.labels['app.kubernetes.io/component']"
+    - name: OTEL_COLLECTOR_NAME
+      value: 'dynatrace-collector-opentelemetry-collector'

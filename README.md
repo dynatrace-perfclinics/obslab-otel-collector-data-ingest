@@ -27,6 +27,8 @@ While you are waiting, you can proceed to the next step to create an access toke
 
 ## Create an Access Token
 
+Do the following in Dynatrace:
+
 - Press `Ctrl + k` to bring up the search box.
 - Type `access tokens` and select the first option
 - Create an access token with these permissions: `openTelemetryTrace.ingest`, `metrics.ingest` and `logs.ingest`

@@ -85,6 +85,8 @@ Wait and periodically re-run `kubectl get pods` until the Pod is `Running`.
 
 Use Helm to install the OpenTelemetry demo system, passing the configuration file (already created for you - see [otel-demo-values.yaml](otel-demo-values.yaml)).
 
+This is a demo website we will use to generate OpenTelemetry data (logs, metrics and traces).
+
 ```
 helm upgrade -i my-otel-demo open-telemetry/opentelemetry-demo -f otel-demo-values.yaml
 ```

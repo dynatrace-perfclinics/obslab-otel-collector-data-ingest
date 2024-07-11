@@ -9,11 +9,9 @@ Go to `https://dynatrace.com/trial` if you do not already have access.
 
 ## Start Demo
 
-1. Sign into GitHub.com then click the `Code` button.
-1. Select the `Codespaces` tab
-1. Click "Create codespace on main"
+Click this link to start the demo:
 
-![create codespace](.devcontainer/images/create-codespace.png)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dynatrace-perfclinics/dt-collector-demo)
 
 Wait for the system to start. A new browser window will be created and a Kubernetes cluster will be installed for you.
 Towards the bottom of the screen, you should see an empty terminal prompt like this:

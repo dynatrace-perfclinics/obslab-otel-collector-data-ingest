@@ -607,7 +607,7 @@ helm repo update
 </code></pre>
 <h2 id="configure-and-install-dynatrace-opentelemetry-collector">Configure and Install Dynatrace OpenTelemetry Collector<a class="headerlink" href="#configure-and-install-dynatrace-opentelemetry-collector" title="Permanent link">#</a></h2>
 <p>The OpenTelemetry collector requires a configuration file.</p>
-<p>This is already available in the environment. See <a href="collector-values.yaml">collector-values.yaml</a></p>
+<p>This is already available in the environment. See <a href="https://github.com/dynatrace-perfclinics/obslab-otel-collector-data-ingest/blob/main/collector-values.yaml" target="_blank">collector-values.yaml</a></p>
 <p>You do not need to modify this file.</p>
 <p>Install the collector by copy and pasting this content:</p>
 <pre><code>helm upgrade -i dynatrace-collector open-telemetry/opentelemetry-collector -f collector-values.yaml
@@ -617,7 +617,7 @@ helm repo update
 </code></pre>
 <p>Wait and periodically re-run <code>kubectl get pods</code> until the Pod is <code>Running</code>.</p>
 <h2 id="install-opentelemetry-demo">Install OpenTelemetry Demo<a class="headerlink" href="#install-opentelemetry-demo" title="Permanent link">#</a></h2>
-<p>Use Helm to install the OpenTelemetry demo system, passing the configuration file (already created for you - see <a href="otel-demo-values.yaml">otel-demo-values.yaml</a>).</p>
+<p>Use Helm to install the OpenTelemetry demo system, passing the configuration file (already created for you - see <a href="https://github.com/dynatrace-perfclinics/obslab-otel-collector-data-ingest/blob/main/otel-demo-values.yaml" target="_blank">otel-demo-values.yaml</a>).</p>
 <p>This is a demo website we will use to generate OpenTelemetry data (logs, metrics and traces).</p>
 <pre><code>helm upgrade -i my-otel-demo open-telemetry/opentelemetry-demo -f otel-demo-values.yaml
 </code></pre>

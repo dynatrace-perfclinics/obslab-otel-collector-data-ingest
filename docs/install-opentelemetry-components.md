@@ -27,6 +27,12 @@ helm repo update
 
 ## Configure and Install Dynatrace OpenTelemetry Collector
 
+Create RBAC roles and role bindings so that hte collector (which you will install next) can retrieve topology metadata information from the Kubernetes API:
+
+```
+kubectl apply -f collector-rbac.yaml
+```
+
 The OpenTelemetry collector requires a configuration file.
 
 This is already available in the environment. See [collector-values.yaml](https://github.com/dynatrace-perfclinics/obslab-otel-collector-data-ingest/blob/main/collector-values.yaml){target=_blank}

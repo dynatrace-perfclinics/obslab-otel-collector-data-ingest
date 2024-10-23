@@ -26,26 +26,126 @@ config:
     otlp:
       protocols:
         grpc:
-          endpoint: $MY_POD_IP:4317
+          endpoint: ${env:MY_POD_IP}:4317
         http:
-          endpoint: $MY_POD_IP:4318
+          endpoint: ${env:MY_POD_IP}:4318
     filelog: null
+  
+  processors:
+    cumulativetodelta:
+
+    k8sattributes:
+      extract:
+        metadata:
+          - k8s.pod.name
+          - k8s.pod.uid
+          - k8s.deployment.name
+          - k8s.statefulset.name
+          - k8s.daemonset.name
+          - k8s.cronjob.name
+          - k8s.namespace.name
+          - k8s.node.name
+          - k8s.cluster.uid
+        annotations:
+          # Extracts the value of a pod annotation with key `ownedBy` and inserts it as a resource attribute with key `dt.owner`
+          # see otel-demo-values.yaml for where `ownedBy` is set as a custom annotation only on the `cartservice` pods
+          - tag_name: dt.owner
+            key: ownedBy
+            from: pod
+          # Extracts the value of a pod annotation with key `product` and inserts it as a resource attribute with key `dt.cost.product`
+          # see otel-demo-values.yaml for where `product` is set as a custom annotation only on the `cartservice` pods
+          - tag_name: dt.cost.product
+            key: product
+            from: pod
+          # Extracts the value of a pod annotation with key `costCentre` and inserts it as a resource attribute with key `dt.cost.costcenter`
+          # Notice the deliberate English / US spelling differences to emphasis that `costCentre` is a custom annotation
+          # set in otel-demo-values.yaml
+          - tag_name: dt.cost.costcenter
+            key: costCentre
+            from: pod
+          - tag_name: supportInfo
+            key: supportInfo
+            from: pod
+          - tag_name: deployment.release_product
+            key: product
+            from: pod
+          - tag_name: deployment.release_stage
+            key: environment
+            from: pod
+      # How to associate the data to a pod (order matters)
+      pod_association:
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.name
+          - from: resource_attribute
+            name: k8s.namespace.name
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.ip
+        - sources:
+          - from: resource_attribute
+            name: k8s.pod.uid
+        - sources:
+          - from: connection
+
+    transform:
+      error_mode: ignore
+      trace_statements:
+        - context: resource
+          statements:
+            - set(attributes["dt.kubernetes.workload.kind"], "statefulset") where IsString(attributes["k8s.statefulset.name"])
+            - set(attributes["dt.kubernetes.workload.name"], attributes["k8s.statefulset.name"]) where IsString(attributes["k8s.statefulset.name"])
+            - set(attributes["dt.kubernetes.workload.kind"], "deployment") where IsString(attributes["k8s.deployment.name"])
+            - set(attributes["dt.kubernetes.workload.name"], attributes["k8s.deployment.name"]) where IsString(attributes["k8s.deployment.name"])
+            - set(attributes["dt.kubernetes.workload.kind"], "daemonset") where IsString(attributes["k8s.daemonset.name"])
+            - set(attributes["dt.kubernetes.workload.name"], attributes["k8s.daemonset.name"]) where IsString(attributes["k8s.daemonset.name"])
+            - set(attributes["dt.kubernetes.cluster.id"], attributes["k8s.cluster.uid"]) where IsString(attributes["k8s.cluster.uid"])
+      log_statements:
+        - context: resource
+          statements:
+            - set(attributes["dt.kubernetes.workload.kind"], "statefulset") where IsString(attributes["k8s.statefulset.name"])
+            - set(attributes["dt.kubernetes.workload.name"], attributes["k8s.statefulset.name"]) where IsString(attributes["k8s.statefulset.name"])
+            - set(attributes["dt.kubernetes.workload.kind"], "deployment") where IsString(attributes["k8s.deployment.name"])
+            - set(attributes["dt.kubernetes.workload.name"], attributes["k8s.deployment.name"]) where IsString(attributes["k8s.deployment.name"])
+            - set(attributes["dt.kubernetes.workload.kind"], "daemonset") where IsString(attributes["k8s.daemonset.name"])
+            - set(attributes["dt.kubernetes.workload.name"], attributes["k8s.daemonset.name"]) where IsString(attributes["k8s.daemonset.name"])
+            - set(attributes["dt.kubernetes.cluster.id"], attributes["k8s.cluster.uid"]) where IsString(attributes["k8s.cluster.uid"])
+        - context: log
+          # statements:
+          #   - set(attributes["alertlevel"], "p4") where attributes["service.name"] == "cartservice"
+          statements:
+            # Use string "true" here
+            # not boolean as it is more flexible in the future
+            # Case insensitive match
+            # - set(attributes["alertme"], "true")
+            #   where resource.attributes["service.name"] == "cartservice"
+            #   and IsMatch(body, "(?i)getcartasync.*")
+            # - set(attributes["alertmessage"], "Critical Redis connection error!")
+            #   where resource.attributes["service.name"] == "cartservice"
+            #   and resource.attributes["deployment.release_stage"] == "production"
+            #   and IsMatch(body, "(?i)wasn't able to connect to redis.*")
+            # - set(attributes["priority"], "1")
+            #   where resource.attributes["service.name"] == "cartservice"
+            #   and resource.attributes["deployment.release_stage"] == "production"
+            #   and IsMatch(body, "(?i)wasn't able to connect to redis.*")
   exporters:
+    debug:
+      verbosity: detailed
     otlphttp:
       endpoint: "${env:DT_ENDPOINT}"
       headers:
         Authorization: "Api-Token ${env:DT_API_TOKEN}"
   service:
     pipelines:
-      traces:
-        receivers: [otlp]
-        processors: []
-        exporters: [otlphttp]
       metrics:
         receivers: [otlp]
-        processors: []
+        processors: [cumulativetodelta]
+        exporters: [otlphttp]
+      traces:
+        receivers: [otlp]
+        processors: [k8sattributes, transform]
         exporters: [otlphttp]
       logs:
         receivers: [otlp]
-        processors: []
-        exporters: [otlphttp]
+        processors: [k8sattributes, transform]
+        exporters: [debug, otlphttp]

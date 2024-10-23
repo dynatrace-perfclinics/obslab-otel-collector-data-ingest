@@ -28,7 +28,7 @@ helm upgrade -i dynatrace-collector open-telemetry/opentelemetry-collector -f co
 
 # Wait for pods
 # --8<-- [start:waitForPodsReadyDefaultNS]
-kubectl wait --for=condition=Ready pod --all
+kubectl wait --for=condition=Ready pod --all --timeout=10m
 # --8<-- [end:waitForPodsReadyDefaultNS]
 
 # Install OTEL Demo

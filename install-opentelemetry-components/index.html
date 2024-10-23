@@ -592,7 +592,7 @@ helm repo update
 <div class="highlight"><pre><span></span><code>helm upgrade -i dynatrace-collector open-telemetry/opentelemetry-collector -f collector-values.yaml
 </code></pre></div>
 <p>After Helm indicates it has installed, run the following command and wait until both pods are <code>Ready</code>.</p>
-<div class="highlight"><pre><span></span><code>kubectl wait --for=condition=Ready pod --all
+<div class="highlight"><pre><span></span><code>kubectl wait --for=condition=Ready pod --all --timeout=10m
 </code></pre></div>
 <h2 id="install-opentelemetry-demo">Install OpenTelemetry Demo<a class="headerlink" href="#install-opentelemetry-demo" title="Permanent link">#</a></h2>
 <p>Use Helm to install the OpenTelemetry demo system, passing the configuration file (already created for you - see <a href="https://github.com/dynatrace-perfclinics/obslab-otel-collector-data-ingest/blob/main/otel-demo-values.yaml" target="_blank">otel-demo-values.yaml</a>).</p>
@@ -600,7 +600,7 @@ helm repo update
 <div class="highlight"><pre><span></span><code>helm upgrade -i my-otel-demo open-telemetry/opentelemetry-demo -f otel-demo-values.yaml
 </code></pre></div>
 <p>Again wait for all pods to start up:</p>
-<div class="highlight"><pre><span></span><code>kubectl wait --for=condition=Ready pod --all
+<div class="highlight"><pre><span></span><code>kubectl wait --for=condition=Ready pod --all --timeout=10m
 </code></pre></div>
 <div class="grid cards">
 <ul>

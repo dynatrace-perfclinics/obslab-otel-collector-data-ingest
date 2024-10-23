@@ -8,4 +8,6 @@ Add a new section and choose `Query Grail`. This section type allows you to writ
 
 Type: `fetch spans` in the DQL box and execute the query.
 
-## [Click Here to Cleanup resources...](cleanup.md)
+<div class="grid cards" markdown>
+- [Click Here to Cleanup resources :octicons-arrow-right-24:](cleanup.md)
+</div>

@@ -9,9 +9,7 @@ Change `abc12345` to your environment ID and change `dt0c01.sample.secret` to th
 Note: Do not change the name. Leave as `dynatrace-otelcol-dt-api-credentials`
 
 ```
-kubectl create secret generic dynatrace-otelcol-dt-api-credentials \
---from-literal=DT_ENDPOINT=https://abc12345.live.dynatrace.com/api/v2/otlp \
---from-literal=DT_API_TOKEN=dt0c01.sample.secret
+--8<-- "snippets/commands.sh:createSecret"
 ```
 
 You should see this: `secret/dynatrace-otelcol-dt-api-credentials created`
@@ -21,16 +19,15 @@ You should see this: `secret/dynatrace-otelcol-dt-api-credentials created`
 Copy and paste the following to add the OpenTelemetry Helm chart and update it to the latest versions.
 
 ```
-helm repo add open-telemetry https://open-telemetry.github.io/opentelemetry-helm-charts
-helm repo update
+--8<-- "snippets/commands.sh:addOTELHelmChartsAndUpdate"
 ```
 
 ## Configure and Install Dynatrace OpenTelemetry Collector
 
-Create RBAC roles and role bindings so that hte collector (which you will install next) can retrieve topology metadata information from the Kubernetes API:
+Create RBAC roles and role bindings so that the collector (which you will install next) can retrieve topology metadata information from the Kubernetes API:
 
 ```
-kubectl apply -f collector-rbac.yaml
+--8<-- "snippets/commands.sh:addCollectorRBAC"
 ```
 
 The OpenTelemetry collector requires a configuration file.
@@ -42,16 +39,14 @@ You do not need to modify this file.
 Install the collector by copy and pasting this content:
 
 ```
-helm upgrade -i dynatrace-collector open-telemetry/opentelemetry-collector -f collector-values.yaml
+--8<-- "snippets/commands.sh:installCollector"
 ```
 
-After Helm indicates it has installed, run the following command and you should see a pod either `Pending` or `Running`.
+After Helm indicates it has installed, run the following command and wait until both pods are `Ready`.
 
 ```
-kubectl get pods
+--8<-- "snippets/commands.sh:waitForPodsReadyDefaultNS"
 ```
-
-Wait and periodically re-run `kubectl get pods` until the Pod is `Running`.
 
 ## Install OpenTelemetry Demo
 
@@ -60,9 +55,15 @@ Use Helm to install the OpenTelemetry demo system, passing the configuration fil
 This is a demo website we will use to generate OpenTelemetry data (logs, metrics and traces).
 
 ```
-helm upgrade -i my-otel-demo open-telemetry/opentelemetry-demo -f otel-demo-values.yaml
+--8<-- "snippets/commands.sh:installOTELDemo"
 ```
 
-The Pods may take 2-3 minutes to start, but running `kubectl get pods` should eventually show the pods running.
+Again wait for all pods to start up:
 
-## [Click Here to Continue...](access-ui.md)
+```
+--8<-- "snippets/commands.sh:waitForPodsReadyDefaultNS"
+```
+
+<div class="grid cards" markdown>
+- [Click Here to Continue :octicons-arrow-right-24:](access-ui.md)
+</div>

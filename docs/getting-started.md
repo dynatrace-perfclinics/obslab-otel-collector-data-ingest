@@ -27,4 +27,6 @@ Click this button to open the demo environment. This will open in a new tab.
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/dynatrace-perfclinics/obslab-otel-collector-data-ingest){target="_blank"}
 
-## [Click Here to Continue...](install-opentelemetry-components.md)
+<div class="grid cards" markdown>
+- [Click Here to Continue :octicons-arrow-right-24:](install-opentelemetry-components.md)
+</div>

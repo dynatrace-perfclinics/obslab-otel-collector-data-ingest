@@ -378,15 +378,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#click-here-to-continue" class="md-nav__link">
-    <span class="md-ellipsis">
-      Click Here to Continue...
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -555,15 +546,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#click-here-to-continue" class="md-nav__link">
-    <span class="md-ellipsis">
-      Click Here to Continue...
-    </span>
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -590,8 +572,8 @@
 <p>Change <code>abc12345</code> to your environment ID and change <code>dt0c01.sample.secret</code> to the value of your API token (generated above).</p>
 <p>Note: Do not change the name. Leave as <code>dynatrace-otelcol-dt-api-credentials</code></p>
 <div class="highlight"><pre><span></span><code>kubectl create secret generic dynatrace-otelcol-dt-api-credentials \
---from-literal=DT_ENDPOINT=https://abc12345.live.dynatrace.com/api/v2/otlp \
---from-literal=DT_API_TOKEN=dt0c01.sample.secret
+  --from-literal=DT_ENDPOINT=https://abc12345.live.dynatrace.com/api/v2/otlp \
+  --from-literal=DT_API_TOKEN=dt0c01.sample.secret
 </code></pre></div>
 <p>You should see this: <code>secret/dynatrace-otelcol-dt-api-credentials created</code></p>
 <h2 id="add-opentelemetry-helm-charts-and-update">Add OpenTelemetry Helm charts and Update<a class="headerlink" href="#add-opentelemetry-helm-charts-and-update" title="Permanent link">#</a></h2>
@@ -600,7 +582,7 @@
 helm repo update
 </code></pre></div>
 <h2 id="configure-and-install-dynatrace-opentelemetry-collector">Configure and Install Dynatrace OpenTelemetry Collector<a class="headerlink" href="#configure-and-install-dynatrace-opentelemetry-collector" title="Permanent link">#</a></h2>
-<p>Create RBAC roles and role bindings so that hte collector (which you will install next) can retrieve topology metadata information from the Kubernetes API:</p>
+<p>Create RBAC roles and role bindings so that the collector (which you will install next) can retrieve topology metadata information from the Kubernetes API:</p>
 <div class="highlight"><pre><span></span><code>kubectl apply -f collector-rbac.yaml
 </code></pre></div>
 <p>The OpenTelemetry collector requires a configuration file.</p>
@@ -609,17 +591,22 @@ helm repo update
 <p>Install the collector by copy and pasting this content:</p>
 <div class="highlight"><pre><span></span><code>helm upgrade -i dynatrace-collector open-telemetry/opentelemetry-collector -f collector-values.yaml
 </code></pre></div>
-<p>After Helm indicates it has installed, run the following command and you should see a pod either <code>Pending</code> or <code>Running</code>.</p>
-<div class="highlight"><pre><span></span><code>kubectl get pods
+<p>After Helm indicates it has installed, run the following command and wait until both pods are <code>Ready</code>.</p>
+<div class="highlight"><pre><span></span><code>kubectl wait --for=condition=Ready pod --all
 </code></pre></div>
-<p>Wait and periodically re-run <code>kubectl get pods</code> until the Pod is <code>Running</code>.</p>
 <h2 id="install-opentelemetry-demo">Install OpenTelemetry Demo<a class="headerlink" href="#install-opentelemetry-demo" title="Permanent link">#</a></h2>
 <p>Use Helm to install the OpenTelemetry demo system, passing the configuration file (already created for you - see <a href="https://github.com/dynatrace-perfclinics/obslab-otel-collector-data-ingest/blob/main/otel-demo-values.yaml" target="_blank">otel-demo-values.yaml</a>).</p>
 <p>This is a demo website we will use to generate OpenTelemetry data (logs, metrics and traces).</p>
 <div class="highlight"><pre><span></span><code>helm upgrade -i my-otel-demo open-telemetry/opentelemetry-demo -f otel-demo-values.yaml
 </code></pre></div>
-<p>The Pods may take 2-3 minutes to start, but running <code>kubectl get pods</code> should eventually show the pods running.</p>
-<h2 id="click-here-to-continue"><a href="../access-ui/">Click Here to Continue...</a><a class="headerlink" href="#click-here-to-continue" title="Permanent link">#</a></h2>
+<p>Again wait for all pods to start up:</p>
+<div class="highlight"><pre><span></span><code>kubectl wait --for=condition=Ready pod --all
+</code></pre></div>
+<div class="grid cards">
+<ul>
+<li><a href="../access-ui/">Click Here to Continue <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"/></svg></span></a></li>
+</ul>
+</div>
 
 
 
@@ -666,7 +653,7 @@ helm repo update
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
